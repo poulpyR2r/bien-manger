@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le : jeu. 13 oct. 2022 à 15:50
+-- Généré le : ven. 14 oct. 2022 à 09:51
 -- Version du serveur : 10.4.24-MariaDB
 -- Version de PHP : 7.4.28
 
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de données : `marmiton`
+-- Base de données : `bien_manger`
 --
 
 -- --------------------------------------------------------
@@ -42,7 +42,7 @@ CREATE TABLE `images` (
   `id` int(11) NOT NULL,
   `url` varchar(250) DEFAULT NULL,
   `alternate_text` varchar(200) DEFAULT NULL,
-  `id_1` int(11) NOT NULL
+  `idRecipe` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -63,9 +63,9 @@ CREATE TABLE `ingredients` (
 --
 
 CREATE TABLE `ingredients_recipes` (
-  `id` int(11) NOT NULL,
-  `id_1` int(11) NOT NULL,
-  `quantty` double DEFAULT NULL
+  `idIngredient` int(11) NOT NULL,
+  `idRecipe` int(11) NOT NULL,
+  `quantity` double DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -90,12 +90,12 @@ CREATE TABLE `recipes` (
   `name` varchar(50) NOT NULL,
   `slug` varchar(50) NOT NULL,
   `description` varchar(400) NOT NULL,
-  `guests` tinyint(4) DEFAULT NULL,
+  `guests` smallint(6) DEFAULT NULL,
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
-  `id_1` int(11) NOT NULL,
-  `id_2` int(11) DEFAULT NULL,
-  `id_3` int(11) NOT NULL
+  `idCourse` int(11) NOT NULL,
+  `idSeason` int(11) DEFAULT NULL,
+  `idUser` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -133,7 +133,7 @@ CREATE TABLE `users` (
   `firstname` varchar(39) DEFAULT NULL,
   `mail` varchar(150) NOT NULL,
   `password` varchar(50) DEFAULT NULL,
-  `id_1` int(11) NOT NULL
+  `idPermission` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -151,7 +151,7 @@ ALTER TABLE `courses`
 --
 ALTER TABLE `images`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `id_1` (`id_1`);
+  ADD KEY `idRecipe` (`idRecipe`);
 
 --
 -- Index pour la table `ingredients`
@@ -164,8 +164,8 @@ ALTER TABLE `ingredients`
 -- Index pour la table `ingredients_recipes`
 --
 ALTER TABLE `ingredients_recipes`
-  ADD PRIMARY KEY (`id`,`id_1`),
-  ADD KEY `id_1` (`id_1`);
+  ADD PRIMARY KEY (`idIngredient`,`idRecipe`),
+  ADD KEY `idRecipe` (`idRecipe`);
 
 --
 -- Index pour la table `permissions`
@@ -179,9 +179,9 @@ ALTER TABLE `permissions`
 ALTER TABLE `recipes`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `slug` (`slug`),
-  ADD KEY `id_1` (`id_1`),
-  ADD KEY `id_2` (`id_2`),
-  ADD KEY `id_3` (`id_3`);
+  ADD KEY `idCourse` (`idCourse`),
+  ADD KEY `idSeason` (`idSeason`),
+  ADD KEY `idUser` (`idUser`);
 
 --
 -- Index pour la table `seasons`
@@ -202,7 +202,7 @@ ALTER TABLE `steps`
 ALTER TABLE `users`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `mail` (`mail`),
-  ADD KEY `id_1` (`id_1`);
+  ADD KEY `idPermission` (`idPermission`);
 
 --
 -- AUTO_INCREMENT pour les tables déchargées
@@ -264,22 +264,22 @@ ALTER TABLE `users`
 -- Contraintes pour la table `images`
 --
 ALTER TABLE `images`
-  ADD CONSTRAINT `images_ibfk_1` FOREIGN KEY (`id_1`) REFERENCES `recipes` (`id`);
+  ADD CONSTRAINT `images_ibfk_1` FOREIGN KEY (`idRecipe`) REFERENCES `recipes` (`id`);
 
 --
 -- Contraintes pour la table `ingredients_recipes`
 --
 ALTER TABLE `ingredients_recipes`
-  ADD CONSTRAINT `ingredients_recipes_ibfk_1` FOREIGN KEY (`id`) REFERENCES `ingredients` (`id`),
-  ADD CONSTRAINT `ingredients_recipes_ibfk_2` FOREIGN KEY (`id_1`) REFERENCES `recipes` (`id`);
+  ADD CONSTRAINT `ingredients_recipes_ibfk_1` FOREIGN KEY (`idIngredient`) REFERENCES `ingredients` (`id`),
+  ADD CONSTRAINT `ingredients_recipes_ibfk_2` FOREIGN KEY (`idRecipe`) REFERENCES `recipes` (`id`);
 
 --
 -- Contraintes pour la table `recipes`
 --
 ALTER TABLE `recipes`
-  ADD CONSTRAINT `recipes_ibfk_1` FOREIGN KEY (`id_1`) REFERENCES `courses` (`id`),
-  ADD CONSTRAINT `recipes_ibfk_2` FOREIGN KEY (`id_2`) REFERENCES `seasons` (`id`),
-  ADD CONSTRAINT `recipes_ibfk_3` FOREIGN KEY (`id_3`) REFERENCES `users` (`id`);
+  ADD CONSTRAINT `recipes_ibfk_1` FOREIGN KEY (`idCourse`) REFERENCES `courses` (`id`),
+  ADD CONSTRAINT `recipes_ibfk_2` FOREIGN KEY (`idSeason`) REFERENCES `seasons` (`id`),
+  ADD CONSTRAINT `recipes_ibfk_3` FOREIGN KEY (`idUser`) REFERENCES `users` (`id`);
 
 --
 -- Contraintes pour la table `steps`
@@ -291,7 +291,7 @@ ALTER TABLE `steps`
 -- Contraintes pour la table `users`
 --
 ALTER TABLE `users`
-  ADD CONSTRAINT `users_ibfk_1` FOREIGN KEY (`id_1`) REFERENCES `permissions` (`id`);
+  ADD CONSTRAINT `users_ibfk_1` FOREIGN KEY (`idPermission`) REFERENCES `permissions` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
