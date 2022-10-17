@@ -1,6 +1,6 @@
 import {Model, DataTypes} from 'sequelize'
 import { sequelize } from '../config/database'
-import { Recipe } from './Recipe';
+import { Recipe } from './recipe';
 //import { User } from './User';
 
 export class Course extends Model

@@ -9,6 +9,7 @@ import { generateToken } from './authenticate/jwt';
 import {PORT} from './config/constants';
 
 import { router } from './routes/recipe';
+import { authenticatRouter } from './routes/user';
 
 
 
@@ -23,9 +24,13 @@ app.use(cors());
 app.use(express.json());
 
 
-
+app.put('/recipe/update/:id',router);
 app.get('/recipe/show/:id',router);
+app.post('/recipe/add',router);
+app.post('/users/sign-in', authenticatRouter);
+app.post('/users/login', authenticatRouter);
 console.log('le token est :', generateToken());
+
 
 
 app.listen(PORT, ()=> {

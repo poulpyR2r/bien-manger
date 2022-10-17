@@ -1,8 +1,9 @@
 import {Model, DataTypes} from 'sequelize'
 import { sequelize } from '../config/database'
 import { Course } from './course';
+import { Permission } from './permission';
 
-export class User extends Model
+export class Users extends Model
 {
     public id!: number;
     public lastname!: string;
@@ -15,11 +16,14 @@ export class User extends Model
 
 
 
-User.init({
+Users.init({
     id: {
         type: DataTypes.INTEGER,
-        allowNull: false
-      },
+        allowNull: false,
+        autoIncrement: true, 
+  
+        primaryKey: true, 
+    },
     lastname: {
         type: DataTypes.STRING,
         allowNull: false
@@ -36,16 +40,30 @@ User.init({
         type: DataTypes.STRING,
         allowNull: false
     },
-    idPermission: {
-        type: DataTypes.INTEGER,
-        allowNull: false
-    },
 
-},
+    idPermission:{
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+            model: "Permission",
+            key: "id"
+            
+        }, 
+  
+    }, 
+
+   
+
+  }, 
 {
     sequelize,
-    tableName: "user"
+    tableName: "users",
+    timestamps: false,
+        
+    
+
     
     
 });
 
+Permission.hasOne(Users, { foreignKey: "idPermission" }); 
