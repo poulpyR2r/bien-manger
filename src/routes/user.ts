@@ -15,5 +15,5 @@ export const authenticatRouter = express.Router({
 
 });
 
-authenticatRouter.route('/users/login').post(userController.create);
-authenticatRouter.route('/users/sign-in').post(userController.create);
+authenticatRouter.route('/users/login').post(userController.signin);
+authenticatRouter.route('/users/sign-in').post(userController.signin);

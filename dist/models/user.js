@@ -24,7 +24,12 @@ Users.init({
     },
     mail: {
         type: sequelize_1.DataTypes.STRING,
-        allowNull: false
+        allowNull: false,
+        unique: false,
+        validate: {
+            isEmail: true,
+            max: 200
+        }
     },
     password: {
         type: sequelize_1.DataTypes.STRING,

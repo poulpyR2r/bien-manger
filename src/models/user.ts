@@ -34,7 +34,12 @@ Users.init({
     },
     mail: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: false,
+        unique: false,
+        validate:{
+            isEmail: true,
+            max :200
+        }
     },
     password: {
         type: DataTypes.STRING,
