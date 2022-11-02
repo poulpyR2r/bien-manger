@@ -13,6 +13,7 @@ import { Users } from "../models/user";
 import { CrudController } from "./CrudController";
 import status from "http-status";
 import { Permission } from "../models/permission";
+import { resolve } from "path";
 
 
 
@@ -40,36 +41,24 @@ export class UserController extends CrudController {
   }
  
 
-  public async login(req: Request, res: Response): Promise<void> {
-    
-    const plainPassword = req.body.password;
+  public async login(req: Request, res: Response): Promise<any> {
     const mail = req.body.mail;
+    const plainPassword = req.body.password;
 
-    const user = await Users.findOne({ where: {mail: mail} });
-    
-    if(user === null) {
-      res.json('login invalide');
+    const user = await Users.findOne({ where: { mail:mail } });
+    if (user == null) {
+      // console.log("User", user.lastname, user.idPermission);
+      res.json({message: "User not found"});
       return;
-     }
-    const bMatch = await compare(plainPassword, user!.password);
-    if(!bMatch) {
-      res.json('login invalide');
-    }
+    } 
 
-    const permissions = await Permission.findByPk(user.idPermission);
-    if(permissions === null ){
+    const permisson = await Permission.findByPk(user!.idPermission);
+    const bMacth = await compare(plainPassword, user!.password);
 
-      res.status(status.UNAUTHORIZED).json('invalid credantials')
-      return;
-    };
-
-    
-
-    res.json({'token' : generateToken(user.lastname, user.mail, permissions.role)})
-    
-
-    
-
+  //   if (!bMacth) {
+  //     res.status(status.UNAUTHORIZED).json({ message  : "Invalid credential" });
+  // }
+  res.status(status.OK).json({'token' : generateToken(user!.lastname, user!.mail, permisson!.role)});
   }
 
 

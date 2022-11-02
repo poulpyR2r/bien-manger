@@ -1,45 +1,27 @@
-
 import {Model, DataTypes} from 'sequelize'
-
-import { sequelize } from '../config/database'
+import { sequelize } from '../config/database' 
+//import { User } from './User';
 
 export class Permission extends Model
-
 {
-
-     public id!: number;
-     public role!: string;
-
+    declare id: number;
+    declare role: string;
 }
 
 Permission.init({
-
-     id: {
-
-         type: DataTypes.INTEGER,
-
-        autoIncrement: true,
-
-        primaryKey: true
-
-    },
-
-        menu: {
-
-        type: DataTypes.STRING,
-        allowNull: true
-
-        },
-
+    id: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true
+    },
+    role: {
+        type: DataTypes.STRING,
+        allowNull: true
+    },
 },
-
 {
-
-    sequelize,
-    tableName: "permissions",
+    sequelize,
+    tableName: "permissions",
     timestamps: false
-    
 }
-
 );
-

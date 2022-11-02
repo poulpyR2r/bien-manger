@@ -111,7 +111,6 @@ export class Recipe extends Model {
    
   
   Recipe.belongsTo(Course, { foreignKey: "idCourse" }); 
-  
   Course.hasOne(Recipe, { foreignKey: "idCourse" }); 
   
    

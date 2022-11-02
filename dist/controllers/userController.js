@@ -27,24 +27,20 @@ class UserController extends CrudController_1.CrudController {
         });
     }
     async login(req, res) {
-        const plainPassword = req.body.password;
         const mail = req.body.mail;
+        const plainPassword = req.body.password;
         const user = await user_1.Users.findOne({ where: { mail: mail } });
-        if (user === null) {
-            res.json('login invalide');
+        if (user == null) {
+            // console.log("User", user.lastname, user.idPermission);
+            res.json({ message: "User not found" });
             return;
         }
-        const bMatch = await (0, bcrypt_1.compare)(plainPassword, user.password);
-        if (!bMatch) {
-            res.json('login invalide');
-        }
-        const permissions = await permission_1.Permission.findByPk(user.idPermission);
-        if (permissions === null) {
-            res.status(http_status_1.default.UNAUTHORIZED).json('invalid credantials');
-            return;
-        }
-        ;
-        res.json({ 'token': (0, jwt_1.generateToken)(user.lastname, user.mail, permissions.role) });
+        const permisson = await permission_1.Permission.findByPk(user.idPermission);
+        const bMacth = await (0, bcrypt_1.compare)(plainPassword, user.password);
+        //   if (!bMacth) {
+        //     res.status(status.UNAUTHORIZED).json({ message  : "Invalid credential" });
+        // }
+        res.status(http_status_1.default.OK).json({ 'token': (0, jwt_1.generateToken)(user.lastname, user.mail, permisson.role) });
     }
     update(req, res) { }
     delete(req, res) { }

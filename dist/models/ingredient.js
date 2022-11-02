@@ -1,24 +1,26 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Permission = void 0;
+exports.Ingredient = void 0;
 const sequelize_1 = require("sequelize");
 const database_1 = require("../config/database");
-//import { User } from './User';
-class Permission extends sequelize_1.Model {
+class Ingredient extends sequelize_1.Model {
 }
-exports.Permission = Permission;
-Permission.init({
+exports.Ingredient = Ingredient;
+Ingredient.init({
     id: {
         type: sequelize_1.DataTypes.INTEGER,
         autoIncrement: true,
         primaryKey: true
     },
-    role: {
+    name: {
         type: sequelize_1.DataTypes.STRING,
-        allowNull: true
+        allowNull: false,
+        validate: {
+            max: 100,
+        }
     },
 }, {
     sequelize: database_1.sequelize,
-    tableName: "permissions",
+    tableName: "ingredients",
     timestamps: false
 });

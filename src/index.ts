@@ -5,6 +5,8 @@ require('dotenv').config();
 import cors from 'cors';
 import express from 'express';
 import { generateToken } from './authenticate/jwt';
+import { ingredientRouter } from "./routes/ingredients";
+
 
 import {PORT} from './config/constants';
 
@@ -21,7 +23,7 @@ const options: cors.CorsOptions = {
 }
 
 if  (process.env.NODE_ENV !== 'production'){
-    console.log('le token JWT :', generateToken("guewen" , "guewencarre@gmail.com" ,"administrateur"))
+    console.log('le token JWT :', generateToken("guewen" , "guewencarre2@gmail.com" ,"administrateur"))
 }
 
 app.use(cors());
@@ -33,6 +35,7 @@ app.get('/recipe/show/:id',router);
 app.post('/recipe/add',router);
 app.post('/users/sign-in', authenticatRouter);
 app.post('/users/login', authenticatRouter);
+app.get("/ingredient/show/:id", ingredientRouter );
 
 
 
