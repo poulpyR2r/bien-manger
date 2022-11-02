@@ -5,6 +5,7 @@ import { Request, Response } from "express";
 import { ParamsDictionary } from "express-serve-static-core";
 import { read } from "fs";
 import { ParsedQs } from "qs";
+import { generateToken } from "../authenticate/jwt";
 import { BCRYPT_ROUND } from "../config/constants";
 import { sequelize } from "../config/database";
 import { Recipe } from "../models/recipe";
@@ -36,6 +37,28 @@ export class UserController extends CrudController {
     })
   }
  
+
+  public async login(req: Request, res: Response): Promise<void> {
+    
+    const plainPassword = req.body.password;
+    const mail = req.body.mail;
+
+    const user = await Users.findOne({ where: {mail: mail} });
+    
+    if(user === null) {
+      res.json('login invalide');
+      return;
+     }
+    const bMatch = await compare(plainPassword, user!.password);
+    if(!bMatch) {
+      res.json('login invalide');
+    }
+    res.json({'token' : generateToken()})
+    
+
+    
+
+  }
   update(req: Request, res: Response): void {}
 
   delete(req: Request, res: Response): void {}

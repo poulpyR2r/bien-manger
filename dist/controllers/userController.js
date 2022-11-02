@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserController = void 0;
 const bcrypt_1 = require("bcrypt");
+const jwt_1 = require("../authenticate/jwt");
 const constants_1 = require("../config/constants");
 const user_1 = require("../models/user");
 const CrudController_1 = require("./CrudController");
@@ -19,6 +20,20 @@ class UserController extends CrudController_1.CrudController {
             console.log(err); //trop d'informations de la console ne pas mettre ça en prod /!\
             res.json({ 'message': 'insertion impossible' });
         });
+    }
+    async login(req, res) {
+        const plainPassword = req.body.password;
+        const mail = req.body.mail;
+        const user = await user_1.Users.findOne({ where: { mail: mail } });
+        if (user === null) {
+            res.json('login invalide');
+            return;
+        }
+        const bMatch = await (0, bcrypt_1.compare)(plainPassword, user.password);
+        if (!bMatch) {
+            res.json('login invalide');
+        }
+        res.json({ 'token': (0, jwt_1.generateToken)() });
     }
     update(req, res) { }
     delete(req, res) { }
