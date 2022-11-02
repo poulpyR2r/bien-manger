@@ -11,6 +11,8 @@ import { sequelize } from "../config/database";
 import { Recipe } from "../models/recipe";
 import { Users } from "../models/user";
 import { CrudController } from "./CrudController";
+import status from "http-status";
+import { Permission } from "../models/permission";
 
 
 
@@ -53,12 +55,24 @@ export class UserController extends CrudController {
     if(!bMatch) {
       res.json('login invalide');
     }
-    res.json({'token' : generateToken()})
+
+    const permissions = await Permission.findByPk(user.idPermission);
+    if(permissions === null ){
+
+      res.status(status.UNAUTHORIZED).json('invalid credantials')
+      return;
+    };
+
+    
+
+    res.json({'token' : generateToken(user.lastname, user.mail, permissions.role)})
     
 
     
 
   }
+
+
   update(req: Request, res: Response): void {}
 
   delete(req: Request, res: Response): void {}

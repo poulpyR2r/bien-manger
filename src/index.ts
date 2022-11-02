@@ -20,6 +20,10 @@ const options: cors.CorsOptions = {
     origin: allowedOrigin,
 }
 
+if  (process.env.NODE_ENV !== 'production'){
+    console.log('le token JWT :', generateToken("guewen" , "guewencarre@gmail.com" ,"administrateur"))
+}
+
 app.use(cors());
 app.use(express.json());
 
@@ -29,7 +33,7 @@ app.get('/recipe/show/:id',router);
 app.post('/recipe/add',router);
 app.post('/users/sign-in', authenticatRouter);
 app.post('/users/login', authenticatRouter);
-console.log('le token est :', generateToken());
+
 
 
 

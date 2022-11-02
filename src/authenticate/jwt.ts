@@ -1,21 +1,20 @@
 import { JwtPayload, sign, SignOptions, verify, VerifyOptions } from 'jsonwebtoken';
 import * as fs from 'fs';
 import * as path from 'path';
+
  
 /**
  * création du token JWT
  */
-export function generateToken() {
+export function generateToken(userName: string ,mail : string, role: string) {
  // Les informations que l'on souhaite enregistrer dans le token
  const payload = {
- name: 'partenaire1',
- userId: 123,
+ name: userName,
+ mail: mail,
+//  userId: 123,
  // Les accès à l'API que l'on souhaite ouvrir à ce partenaire
  accessTypes: [
- 'getRecipeList',
- 'showRecipe',
- 'updateRecipe',
- 'addRecipe'
+    role
  ]
  };
  // Lecture du fichier private.key permettant de crypter le JWT

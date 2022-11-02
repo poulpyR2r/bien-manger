@@ -1,4 +1,7 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserController = void 0;
 const bcrypt_1 = require("bcrypt");
@@ -6,6 +9,8 @@ const jwt_1 = require("../authenticate/jwt");
 const constants_1 = require("../config/constants");
 const user_1 = require("../models/user");
 const CrudController_1 = require("./CrudController");
+const http_status_1 = __importDefault(require("http-status"));
+const permission_1 = require("../models/permission");
 class UserController extends CrudController_1.CrudController {
     async signin(req, res) {
         let userInfo = req.body;
@@ -33,7 +38,13 @@ class UserController extends CrudController_1.CrudController {
         if (!bMatch) {
             res.json('login invalide');
         }
-        res.json({ 'token': (0, jwt_1.generateToken)() });
+        const permissions = await permission_1.Permission.findByPk(user.idPermission);
+        if (permissions === null) {
+            res.status(http_status_1.default.UNAUTHORIZED).json('invalid credantials');
+            return;
+        }
+        ;
+        res.json({ 'token': (0, jwt_1.generateToken)(user.lastname, user.mail, permissions.role) });
     }
     update(req, res) { }
     delete(req, res) { }
